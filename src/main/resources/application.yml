@@ -1,0 +1,83 @@
+server:
+  port: 8888
+
+logging:
+  level:
+    root: info
+    site.euan.bester: DEBUG
+
+spring:
+  profile:
+    active: secret
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  cache:
+    redis:
+      time-to-live: 28800000 #8小时
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/bester
+    #    url: jdbc:mysql://123.60.24.41:3306/bester
+    username: root
+    password: ${database.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb:
+      authentication-database: admin
+      username: "admin"
+      password: "123456"
+      host: 123.60.24.41
+      port: 27017
+      database: bester
+  servlet:
+    multipart:
+      #最大上传大小
+      max-file-size: 3MB
+      #最大请求大小
+      max-request-size: 10MB
+      enabled: true
+  messages:
+    basename: messages
+    encoding: UTF-8
+  session:
+    timeout: 30m
+  redis:
+    database: 0
+    host: 123.60.24.41
+    port: 6379
+    timeout: 5000
+    lettuce:
+      pool:
+        max-active: 32
+        max-wait: -1ms
+        max-idle: 16
+        min-idle: 8
+    password: 123456
+  mail:
+    host: smtp.qq.com
+    username: 507327431@qq.com
+    password: ${mail.password}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+# 腾讯云COS配置
+tencent:
+  cos:
+    # 存储桶名称
+    bucketName: euan-1306554881
+    # 腾讯云API密钥ID
+    secretId: ${tencent.cos.secretId}
+    # 腾讯云API密钥
+    secretKey: ${tencent.cos.secretKey}
+    # 区域
+    region: ap-chengdu
+    # 文件夹
+    folder: bester/
