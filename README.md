@@ -1,6 +1,6 @@
-Bester是基于SprongBoot框架开发的一个贴吧分享平台，主要发布ALTV平台的插件信息
+### Bester是基于SprongBoot框架开发的一个贴吧分享平台，主要发布ALTV平台的插件信息
 
-在线访问地址：www.euan.site
+## 在线访问地址：www.euan.site
 
 用到语言：SpringBoot、Redis、MongoDB、MYSQL、MyBatis-plus、Vue3
 前端使用的组件库：Ant、Element-ui
