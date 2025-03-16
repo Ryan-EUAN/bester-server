@@ -89,14 +89,6 @@ public class AuthController {
         return Result.success(code);
     }
 
-    @GetMapping("/user/current")
-    @ApiOperation(value = "获取当前用户信息", notes = "根据请求头携带的token，解析请求ID，并返回用户的个人信息")
-    public Result<UserInfoVO> Current() {
-        Long currentId = BaseContext.getCurrentId();
-        UserInfoVO userInfoVO = userService.getCurrent(currentId);
-        return Result.success(userInfoVO);
-    }
-
     @GetMapping("/user/logout")
     @ApiOperation(value = "用户登出接口", notes = "就是给用户退出登录用的")
     public Result Logout() {

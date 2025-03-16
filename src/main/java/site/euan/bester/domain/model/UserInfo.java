@@ -21,4 +21,5 @@ public class UserInfo {
     private Integer following;
     private Integer posts;
     private BigInteger goldCoin;
+    private Integer gender;
 }

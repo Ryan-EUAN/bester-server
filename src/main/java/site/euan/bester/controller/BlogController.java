@@ -1,5 +1,7 @@
 package site.euan.bester.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +30,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/blog")
 @RequiredArgsConstructor
+@Api(tags = "博客控制层")
 @Slf4j
 public class BlogController {
     private final TencentCosUtil tencentCosUtil;
@@ -43,6 +46,7 @@ public class BlogController {
      * @return 返回结果，包含评论内容
      */
     @PostMapping("/send")
+    @ApiOperation(value = "发送评论")
     public Result<String> sendComment(@RequestBody CommentDTO commentDTO) {
         log.info("发送评论{}", commentDTO);
         return Result.success();
@@ -55,6 +59,7 @@ public class BlogController {
      * @return 返回结果，包含上传状态信息
      */
     @PostMapping("/upload-image")
+    @ApiOperation(value = "上传图片")
     public Result<String> uploadImage(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty() || !fileUtil.isImageFile(file)) {
             return Result.error("无效的文件或文件为空");
@@ -73,6 +78,7 @@ public class BlogController {
     }
 
     @PostMapping("/publish")
+    @ApiOperation(value = "发布博客")
     public Result<Blog> publishBlog(@RequestBody SendBlogInfoDTO sendBlogInfoDTO) {
         Long currentId = BaseContext.getCurrentId();
         Blog blog = blogService.publish(sendBlogInfoDTO, currentId);
@@ -81,6 +87,7 @@ public class BlogController {
     }
 
     @GetMapping("/list")
+    @ApiOperation(value = "获取博客列表")
     public Result<List<BlogInfoVO>> blogList() {
         List<BlogInfoVO> blogInfoVOList = blogService.list();
         blogInfoVOList.sort(Comparator.comparing(BlogInfoVO::getId).reversed());
@@ -88,6 +95,7 @@ public class BlogController {
     }
 
     @PutMapping("/like")
+    @ApiOperation(value = "点赞")
     public Result<?> BlogLike(@RequestParam String blogId) {
         Long currentId = BaseContext.getCurrentId();
         List<Long> likeList = blogService.like(blogId, currentId);
@@ -95,6 +103,7 @@ public class BlogController {
     }
 
     @GetMapping("/test")
+    @ApiOperation(value = "测试")
     public Result<?> test() {
         blogService.test();
         return Result.success();

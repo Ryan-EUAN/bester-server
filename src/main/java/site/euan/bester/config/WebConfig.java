@@ -7,14 +7,21 @@ import org.springframework.web.method.HandlerTypePredicate;
 import org.springframework.web.servlet.config.annotation.*;
 import site.euan.bester.interceptor.GlobalInterceptor;
 
+import javax.annotation.Resource;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    @Autowired
+    @Resource
     private GlobalInterceptor globalInterceptor;
 
     // 不需要拦截的WEB路径
     private static final String[] excludeWebPaths = {
             "/api/web/get_head_info"
+    };
+    private static final String[] excludeDevPaths = {
+            "/carousel/top", "/module/getModule", "/module/getOnline"
     };
 
     // 不需要拦截的登录路径
@@ -36,9 +43,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(globalInterceptor)
                 .addPathPatterns("/api/**")
+                .excludePathPatterns()
                 .excludePathPatterns(excludeAuthPaths)
                 .excludePathPatterns(excludeWebPaths)
                 .excludePathPatterns(excludeSwaggerPaths)
+                .excludePathPatterns(Arrays.stream(excludeDevPaths).map(s -> "/api" + s).collect(Collectors.toList()))
                 .excludePathPatterns("/error")
                 .excludePathPatterns("/api/ranking/user/get/goldCoinList");
     }

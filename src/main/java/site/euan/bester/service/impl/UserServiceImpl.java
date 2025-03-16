@@ -16,6 +16,7 @@ import site.euan.bester.domain.dto.UserLoginDTO;
 import site.euan.bester.domain.dto.UserRegisterDTO;
 import site.euan.bester.domain.model.User;
 import site.euan.bester.domain.model.UserInfo;
+import site.euan.bester.domain.vo.ProfileVO;
 import site.euan.bester.domain.vo.TabsListInfoVO;
 import site.euan.bester.domain.vo.UserInfoVO;
 import site.euan.bester.exception.LoginException;
@@ -144,6 +145,17 @@ public class UserServiceImpl implements UserService {
         }
         UserInfo byUserId = userInfoService.getByUserId(user.getId());
         return EncapsulationUserInfo(byUserId);
+    }
+
+    @Override
+    public ProfileVO getProfile(Long currentId) {
+        UserInfo userInfo = userInfoService.getById(currentId);
+        User user = userMapper.selectById(userInfo.getUserId());
+        return ProfileVO.builder()
+                .username(user.getUsername())
+                .gender(userInfo.getGender())
+                .email(user.getEmail())
+                .build();
     }
 
     /**

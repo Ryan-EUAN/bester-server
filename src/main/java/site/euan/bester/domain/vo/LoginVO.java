@@ -1,5 +1,6 @@
 package site.euan.bester.domain.vo;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  */
 @Builder
 @Data
+@ApiModel(value = "登陆信息返回类")
 public class LoginVO implements Serializable {
     @ApiModelProperty(value = "JWT令牌")
     private String token;

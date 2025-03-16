@@ -4,6 +4,7 @@ import site.euan.bester.domain.dto.UserEmailLoginDTO;
 import site.euan.bester.domain.dto.UserLoginDTO;
 import site.euan.bester.domain.dto.UserRegisterDTO;
 import site.euan.bester.domain.model.User;
+import site.euan.bester.domain.vo.ProfileVO;
 import site.euan.bester.domain.vo.TabsListInfoVO;
 import site.euan.bester.domain.vo.UserInfoVO;
 
@@ -59,4 +60,11 @@ public interface UserService {
      * @return
      */
     UserInfoVO loginEmail(UserEmailLoginDTO userEmailLoginDTO);
+
+    /**
+     * 获取用户个人资料
+     * @param currentId
+     * @return
+     */
+    ProfileVO getProfile(Long currentId);
 }
