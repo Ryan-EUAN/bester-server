@@ -29,7 +29,7 @@ public class RankingController {
     @Resource
     private UserInfoService userInfoService;
 
-    @GetMapping("/user/get/goldCoinList")
+    @GetMapping("/getUserGoldCoin")
     @ApiOperation(value = "获取用户金币排行榜")
     public Result<List<TabsListInfoVO>> GetUserGoldCoinRankingList() {
         List<TabsListInfoVO> tabsListInfoVOList = userInfoService.getUserGoldCoinRankingList();

@@ -1,6 +1,7 @@
 package site.euan.bester.controller;
 
 import cn.hutool.core.util.RandomUtil;
+import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +14,7 @@ import site.euan.bester.domain.dto.UserEmailLoginDTO;
 import site.euan.bester.domain.dto.UserLoginDTO;
 import site.euan.bester.domain.dto.UserRegisterDTO;
 import site.euan.bester.domain.entity.Result;
+import site.euan.bester.domain.vo.CheckTokenVO;
 import site.euan.bester.domain.vo.LoginVO;
 import site.euan.bester.domain.vo.UserInfoVO;
 import site.euan.bester.service.MailService;
@@ -51,9 +53,11 @@ public class AuthController {
     @ApiOperation(value = "用户登录接口", notes = "提供给用户的登录接口")
     public Result<LoginVO> UserLogin(@RequestBody UserLoginDTO userLoginDTO) {
         UserInfoVO userInfoVO = userService.login(userLoginDTO);
+        String jwt = jwtUtil.createJwt(userInfoVO.getId(), 3600);
         LoginVO loginVO = LoginVO.builder()
                 .info(userInfoVO)
-                .token(jwtUtil.createJwt(userInfoVO.getId(), 3600))
+                .token(jwt)
+                .expireTime(jwtUtil.parseJwt(jwt).getExpiration().getTime())
                 .build();
         return Result.success(loginVO);
     }
@@ -104,5 +108,16 @@ public class AuthController {
         String password = request.get("password");
         userService.changePassword(password, BaseContext.getCurrentId());
         return Result.success();
+    }
+
+    @GetMapping("/user/check-token")
+    @ApiOperation(value = "检查token是否过期", notes = "检查token是否过期")
+    public Result<CheckTokenVO> CheckToken(@RequestHeader("Authorization") String token) {
+        Claims claims = jwtUtil.parseJwt(token);
+        CheckTokenVO tokenVO = CheckTokenVO.builder()
+                .valid(claims != null)
+                .expireTime(claims != null ? claims.getExpiration().getTime() : 0L)
+                .build();
+        return Result.success(tokenVO);
     }
 }

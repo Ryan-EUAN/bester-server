@@ -31,7 +31,8 @@ public class WebConfig implements WebMvcConfigurer {
             "/api/auth/user/register",
             "/api/auth/user/change-password",
             "/api/auth/user/sendCode",
-            "/api/auth/user/loginEmail"
+            "/api/auth/user/loginEmail",
+            "/api/auth/user/check-token"
     };
 
     // 不需要拦截的Swagger路径
@@ -49,7 +50,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns(excludeSwaggerPaths)
                 .excludePathPatterns(Arrays.stream(excludeDevPaths).map(s -> "/api" + s).collect(Collectors.toList()))
                 .excludePathPatterns("/error")
-                .excludePathPatterns("/api/ranking/user/get/goldCoinList");
+                .excludePathPatterns("/api/ranking/getUserGoldCoin");
     }
 
     @Override

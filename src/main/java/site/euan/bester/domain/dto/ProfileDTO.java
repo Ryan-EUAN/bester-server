@@ -1,17 +1,22 @@
-package site.euan.bester.domain.vo;
+package site.euan.bester.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Builder
 @Data
-@ApiModel(value = "个人资料返回数据类型")
-public class ProfileVO implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel(value = "个人资料DTO")
+public class ProfileDTO implements Serializable {
     @ApiModelProperty(value = "用户名")
     private String username;
     @ApiModelProperty(value = "真实姓名")

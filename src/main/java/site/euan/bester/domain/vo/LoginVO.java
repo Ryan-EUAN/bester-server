@@ -17,7 +17,8 @@ import java.io.Serializable;
 public class LoginVO implements Serializable {
     @ApiModelProperty(value = "JWT令牌")
     private String token;
-
+    @ApiModelProperty(value = "JWT令牌过期时间")
+    private Long expireTime;
     @ApiModelProperty(value = "返回的用户信息")
     private UserInfoVO info;
 }

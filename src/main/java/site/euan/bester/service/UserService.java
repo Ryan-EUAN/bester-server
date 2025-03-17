@@ -1,5 +1,6 @@
 package site.euan.bester.service;
 
+import site.euan.bester.domain.dto.ProfileDTO;
 import site.euan.bester.domain.dto.UserEmailLoginDTO;
 import site.euan.bester.domain.dto.UserLoginDTO;
 import site.euan.bester.domain.dto.UserRegisterDTO;
@@ -56,6 +57,7 @@ public interface UserService {
 
     /**
      * 邮箱登录
+     *
      * @param userEmailLoginDTO
      * @return
      */
@@ -63,8 +65,17 @@ public interface UserService {
 
     /**
      * 获取用户个人资料
+     *
      * @param currentId
      * @return
      */
     ProfileVO getProfile(Long currentId);
+
+    /**
+     * 更新用户资料的方法。
+     *
+     * @param currentId  当前用户的ID，用于确定要更新哪个用户的资料。
+     * @param profileDTO 包含更新后的用户资料的数据传输对象（DTO），包含了用户的基本信息。
+     */
+    void updateProfile(Long currentId, ProfileDTO profileDTO);
 }

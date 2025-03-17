@@ -1,5 +1,6 @@
 package site.euan.bester.service.impl;
 
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import site.euan.bester.constant.UserConstant;
+import site.euan.bester.domain.dto.ProfileDTO;
 import site.euan.bester.domain.dto.UserEmailLoginDTO;
 import site.euan.bester.domain.dto.UserLoginDTO;
 import site.euan.bester.domain.dto.UserRegisterDTO;
@@ -19,6 +21,7 @@ import site.euan.bester.domain.model.UserInfo;
 import site.euan.bester.domain.vo.ProfileVO;
 import site.euan.bester.domain.vo.TabsListInfoVO;
 import site.euan.bester.domain.vo.UserInfoVO;
+import site.euan.bester.domain.vo.VerifyVO;
 import site.euan.bester.exception.LoginException;
 import site.euan.bester.exception.RegisterException;
 import site.euan.bester.exception.UserException;
@@ -150,12 +153,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public ProfileVO getProfile(Long currentId) {
         UserInfo userInfo = userInfoService.getById(currentId);
+        VerifyVO verify = userInfoService.getVerify(currentId);
         User user = userMapper.selectById(userInfo.getUserId());
         return ProfileVO.builder()
                 .username(user.getUsername())
+                .realName(verify.getRealName())
+                .nickName(userInfo.getName())
                 .gender(userInfo.getGender())
+                .birthday(userInfo.getBirthday())
+                .birthplace(JSON.parseArray(userInfo.getBirthplace(), String.class))
+                .residence(JSON.parseArray(userInfo.getResidence(), String.class))
+                .phone(user.getPhone())
                 .email(user.getEmail())
+                .qq(user.getQq())
+                .signature(userInfo.getSignature())
                 .build();
+    }
+
+    @Override
+    public void updateProfile(Long currentId, ProfileDTO profileDTO) {
+        User user = userMapper.selectById(currentId);
+        BeanUtils.copyProperties(profileDTO, user);
+        userMapper.updateById(user);
     }
 
     /**

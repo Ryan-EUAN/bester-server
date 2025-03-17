@@ -1,7 +1,9 @@
 package site.euan.bester.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Document(collection = "blog")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Blog {
     @MongoId
     private String id;

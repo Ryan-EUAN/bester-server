@@ -1,25 +1,35 @@
 package site.euan.bester.service.impl;
 
+import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import site.euan.bester.domain.model.NavBarSecondInfo;
+import site.euan.bester.domain.dto.ProfileDTO;
+import site.euan.bester.domain.dto.VerifyIdentityDTO;
+import site.euan.bester.domain.model.User;
 import site.euan.bester.domain.model.UserInfo;
+import site.euan.bester.domain.model.VerifyIdentity;
 import site.euan.bester.domain.vo.TabsListInfoVO;
+import site.euan.bester.domain.vo.VerifyVO;
 import site.euan.bester.mapper.UserInfoMapper;
+import site.euan.bester.mapper.UserMapper;
+import site.euan.bester.mapper.VerifyIdentityMapper;
 import site.euan.bester.service.UserInfoService;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
 @Slf4j
 public class UserInfoServiceImpl implements UserInfoService {
-    @Autowired
+    @Resource
+    private UserMapper userMapper;
+    @Resource
     private UserInfoMapper userInfoMapper;
+    @Resource
+    private VerifyIdentityMapper verifyIdentityMapper;
 
     @Override
     public UserInfo addInfo(UserInfo userInfo) {
@@ -60,5 +70,40 @@ public class UserInfoServiceImpl implements UserInfoService {
                 .end(a.getGoldCoin().toString())
                 .build()));
         return tabsListInfoVOList;
+    }
+
+    @Override
+    public Long updateProfile(Long currentId, ProfileDTO profileDTO) {
+        UserInfo userInfo = getById(currentId);
+        BeanUtils.copyProperties(profileDTO, userInfo);
+        userInfo.setBirthplace(JSON.toJSONString(profileDTO.getBirthplace()));
+        userInfo.setResidence(JSON.toJSONString(profileDTO.getResidence()));
+        userInfoMapper.updateById(userInfo);
+        return userInfo.getUserId();
+    }
+
+    @Override
+    public void verifyIdentity(Long currentId, VerifyIdentityDTO verifyIdentityDTO) {
+        VerifyIdentity verifyIdentity = new VerifyIdentity();
+        verifyIdentity.setUserId(currentId);
+        verifyIdentity.setRealName(verifyIdentityDTO.getRealName());
+        verifyIdentity.setIdCard(verifyIdentityDTO.getIdCard());
+        verifyIdentityMapper.insert(verifyIdentity);
+    }
+
+    @Override
+    public VerifyVO getVerify(Long currentId) {
+        UserInfo userInfo = userInfoMapper.selectById(currentId);
+        User user = userMapper.selectById(userInfo.getUserId());
+        QueryWrapper<VerifyIdentity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", currentId);
+        VerifyIdentity verifyIdentity = verifyIdentityMapper.selectOne(queryWrapper);
+        return VerifyVO.builder()
+                .phone(user.getPhone())
+                .phoneVerified(user.getPhone() != null && !user.getPhone().isEmpty())
+                .realName(verifyIdentity != null ? verifyIdentity.getRealName() : null)
+                .idCard(verifyIdentity != null ? verifyIdentity.getIdCard() : null)
+                .identityVerified(verifyIdentity != null)
+                .build();
     }
 }
