@@ -1,6 +1,8 @@
 package site.euan.bester.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import site.euan.bester.domain.model.BlogComment;
@@ -15,21 +17,24 @@ import java.util.List;
  */
 @Builder
 @Data
-public class BlogInfoVO implements Serializable {
+@ApiModel(value = "博客信息返回类")
+public class PostInfoVO implements Serializable {
     private String id;
-    //作者
+    @ApiModelProperty(value = "作者信息")
     private UserInfoVO author;
-    //博客内容
+    @ApiModelProperty(value = "标题")
+    private String title;
+    @ApiModelProperty(value = "内容")
     private String content;
-    //发送时间
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @ApiModelProperty(value = "发布时间")
     private LocalDateTime time;
-    //点赞
+    @ApiModelProperty(value = "点赞")
     private List<Long> likes;
-    //评论
+    @ApiModelProperty(value = "评论")
     private List<BlogComment> comments;
-    //转发
+    @ApiModelProperty(value = "转发")
     private Integer reposts;
-    //图片
+    @ApiModelProperty(value = "图片")
     private List<String> images;
 }

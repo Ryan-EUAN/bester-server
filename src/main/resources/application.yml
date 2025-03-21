@@ -1,5 +1,5 @@
 server:
-  port: 80
+  port: ${server.port}
 
 logging:
   level:
@@ -18,19 +18,18 @@ spring:
     redis:
       time-to-live: 28800000 #8小时
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/bester
-    #    url: jdbc:mysql://123.60.24.41:3306/bester
-    username: root
+    url: jdbc:mysql://${database.host}:${database.port}/${database.tableName}
+    username: ${database.username}
     password: ${database.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     mongodb:
-      authentication-database: admin
-      username: "admin"
-      password: "123456"
-      host: 123.60.24.41
-      port: 27017
-      database: bester
+      authentication-database: ${mongodb.authentication-database}
+      username: ${mongodb.username}
+      password: ${mongodb.password}
+      host: ${mongodb.host}
+      port: ${mongodb.port}
+      database: ${mongodb.database}
   servlet:
     multipart:
       #最大上传大小
@@ -45,8 +44,8 @@ spring:
     timeout: 30m
   redis:
     database: 0
-    host: 123.60.24.41
-    port: 6379
+    host: ${redis.host}
+    port: ${redis.port}
     timeout: 5000
     lettuce:
       pool:
@@ -54,10 +53,10 @@ spring:
         max-wait: -1ms
         max-idle: 16
         min-idle: 8
-    password: 123456
+    password: ${redis.password}
   mail:
     host: smtp.qq.com
-    username: 507327431@qq.com
+    username: ${mail.username}
     password: ${mail.password}
     default-encoding: UTF-8
     properties:

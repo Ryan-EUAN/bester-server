@@ -20,8 +20,11 @@ public class WebConfig implements WebMvcConfigurer {
     private static final String[] excludeWebPaths = {
             "/api/web/get_head_info"
     };
+
+    // 不拦截开发路径
     private static final String[] excludeDevPaths = {
-            "/carousel/top", "/module/getModule", "/module/getOnline"
+            "/carousel/top", "/module/getModule", "/module/getOnline", "/posts/list",
+            "/posts/ranking","/posts/*","/posts/ranking/list"
     };
 
     // 不需要拦截的登录路径

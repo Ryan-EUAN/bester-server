@@ -53,7 +53,7 @@ public class AuthController {
     @ApiOperation(value = "用户登录接口", notes = "提供给用户的登录接口")
     public Result<LoginVO> UserLogin(@RequestBody UserLoginDTO userLoginDTO) {
         UserInfoVO userInfoVO = userService.login(userLoginDTO);
-        String jwt = jwtUtil.createJwt(userInfoVO.getId(), 3600);
+        String jwt = jwtUtil.createJwt(userInfoVO.getId());
         LoginVO loginVO = LoginVO.builder()
                 .info(userInfoVO)
                 .token(jwt)
@@ -68,7 +68,7 @@ public class AuthController {
         UserInfoVO userInfoVO = userService.loginEmail(userEmailLoginDTO);
         LoginVO loginVO = LoginVO.builder()
                 .info(userInfoVO)
-                .token(jwtUtil.createJwt(userInfoVO.getId(), 3600))
+                .token(jwtUtil.createJwt(userInfoVO.getId()))
                 .build();
         return Result.success(loginVO);
     }
@@ -79,7 +79,7 @@ public class AuthController {
         UserInfoVO register = userService.register(userRegisterDTO);
         LoginVO loginVO = LoginVO.builder()
                 .info(register)
-                .token(jwtUtil.createJwt(register.getId(), 3600))
+                .token(jwtUtil.createJwt(register.getId()))
                 .build();
         return Result.success(loginVO);
     }
@@ -104,7 +104,7 @@ public class AuthController {
 
     @PutMapping("/user/change-password")
     @ApiOperation(value = "修改用户密码", notes = "修改用户密码")
-    public Result ChangePassword(@RequestBody Map<String, String> request) {
+    public Result<?> ChangePassword(@RequestBody Map<String, String> request) {
         String password = request.get("password");
         userService.changePassword(password, BaseContext.getCurrentId());
         return Result.success();
@@ -113,6 +113,7 @@ public class AuthController {
     @GetMapping("/user/check-token")
     @ApiOperation(value = "检查token是否过期", notes = "检查token是否过期")
     public Result<CheckTokenVO> CheckToken(@RequestHeader("Authorization") String token) {
+        log.info("检查token是否过期");
         Claims claims = jwtUtil.parseJwt(token);
         CheckTokenVO tokenVO = CheckTokenVO.builder()
                 .valid(claims != null)
